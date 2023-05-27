@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>To-Do List</title>
+  <style>
+    body {
+      background-color: #0f0f20;
+      font-family: 'Roboto', sans-serif;
+      margin: 0;
+      padding: 0;
+      color: #ffffff;
+      background-image: url('stars.png');
+      background-repeat: repeat;
+      background-size: 2px;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: rgba(0, 0, 0, 0.8);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+      border-radius: 10px;
+      position: relative;
+    }
+
+    h1 {
+      color: #ffca18;
+      text-align: center;
+      margin-top: 0;
+      margin-bottom: 20px;
+      font-size: 36px;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      background-color: rgba(255, 255, 255, 0.2);
+      color: #ffffff;
+      border: none;
+      border-radius: 4px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2) inset;
+    }
+
+    button {
+      padding: 10px 20px;
+      background-color: #e83b55;
+      color: #ffffff;
+      border: none;
+      cursor: pointer;
+      border-radius: 4px;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #d1304f;
+    }
+
+    ul {
+      list-style-type: none;
+      padding: 0;
+      margin-top: 10px;
+    }
+
+    li {
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: rgba(255, 255, 255, 0.2);
+      padding: 15px;
+      border-radius: 10px;
+    }
+
+    li button {
+      background-color: #ff6961;
+      transition: background-color 0.3s ease;
+    }
+
+    li button:hover {
+      background-color: #e25c54;
+    }
+
+    .planet {
+      position: absolute;
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background-color: rgba(255, 255, 255, 0.3);
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+      z-index: -1;
+    }
+
+    .planet1 {
+      top: 120px;
+      left: 50px;
+    }
+
+    .planet2 {
+      top: 220px;
+      right: 70px;
+    }
+
+    .planet3 {
+      bottom: 80px;
+      left: 80px;
+    }
+
+    .satellite {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background-color: #ffca18;
+      border-radius: 50%;
+      animation: satelliteOrbit 8s linear infinite;
+    }
+
+    .satellite1 {
+      top: -20px;
+      left: -20px;
+      animation-delay: 0s;
+    }
+
+    .satellite2 {
+      top: -20px;
+      right: -20px;
+      animation-delay: 2s;
+    }
+
+    .satellite3 {
+      bottom: -20px;
+      right: -20px;
+      animation-delay: 4s;
+    }
+
+    .satellite4 {
+      bottom: -20px;
+      left: -20px;
+      animation-delay: 6s;
+    }
+
+    .alien {
+      position: absolute;
+      width: 100px;
+      height: 100px;
+      background-image: url('alien.png');
+      background-repeat: no-repeat;
+      background-size: cover;
+      animation: alienFloating 5s infinite alternate;
+      z-index: -1;
+    }
+
+    .rocket {
+      position: absolute;
+      width: 150px;
+      height: 300px;
+      background-image: url('rocket.png');
+      background-repeat: no-repeat;
+      background-size: contain;
+      background-position: center;
+      animation: rocketLaunch 5s infinite;
+      z-index: -1;
+    }
+
+    @keyframes satelliteOrbit {
+      0% {
+        transform: rotate(0deg) translateX(60px) rotate(0deg);
+      }
+      100% {
+        transform: rotate(360deg) translateX(60px) rotate(-360deg);
+      }
+    }
+
+    @keyframes blink {
+      0% {
+        opacity: 1;
+      }
+      50% {
+        opacity: 0.5;
+      }
+      100% {
+        opacity: 1;
+      }
+    }
+
+    .blink {
+      animation: blink 1.5s infinite;
+    }
+
+    @keyframes alienFloating {
+      0% {
+        transform: translateY(0);
+      }
+      100% {
+        transform: translateY(-20px);
+      }
+    }
+
+    @keyframes rocketLaunch {
+      0% {
+        transform: translateY(0) rotate(0);
+      }
+      50% {
+        transform: translateY(-20px) rotate(10deg);
+      }
+      100% {
+        transform: translateY(-40px) rotate(-10deg);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="planet planet1"></div>
+  <div class="planet planet2"></div>
+  <div class="planet planet3"></div>
+
+  <div class="satellite satellite1"></div>
+  <div class="satellite satellite2"></div>
+  <div class="satellite satellite3"></div>
+  <div class="satellite satellite4"></div>
+
+  <div class="alien blink"></div>
+  <div class="rocket"></div>
+
+  <div class="container">
+    <h1>To-Do List - Outer Space</h1>
+    <input type="text" id="taskInput" placeholder="Enter a task">
+    <button id="addTaskButton">Add Task</button>
+    <ul id="taskList"></ul>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var taskInput = document.getElementById('taskInput');
+      var addTaskButton = document.getElementById('addTaskButton');
+      var taskList = document.getElementById('taskList');
+
+      addTaskButton.addEventListener('click', function() {
+        var taskText = taskInput.value;
+
+        if (taskText.trim() !== '') {
+          var taskItem = document.createElement('li');
+          taskItem.innerText = taskText;
+
+          var deleteButton = document.createElement('button');
+          deleteButton.innerText = 'Delete';
+          deleteButton.addEventListener('click', function() {
+            taskList.removeChild(taskItem);
+          });
+
+          taskItem.appendChild(deleteButton);
+          taskList.appendChild(taskItem);
+          taskInput.value = '';
+        }
+      });
+    });
+  </script>
+</body>
+</html>
